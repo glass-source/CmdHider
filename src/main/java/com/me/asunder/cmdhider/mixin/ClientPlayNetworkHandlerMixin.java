@@ -32,6 +32,8 @@ public abstract class ClientPlayNetworkHandlerMixin implements ClientCommonPacke
     @Inject(method = "onCommandTree", at = @At("HEAD"), cancellable = true)
     private void cmdHider$onCommandTree(CommandTreeS2CPacket packet, CallbackInfo ci) {
         MinecraftClient client = MinecraftClient.getInstance();
+        if (client.player == null) return;
+        if (client.player.hasPermissionLevel(2)) return;
         NetworkThreadUtils.forceMainThread(packet, client.getNetworkHandler(), client);
 
         CommandDispatcher<CommandSource> vanillaDispatcher = new CommandDispatcher<>(
